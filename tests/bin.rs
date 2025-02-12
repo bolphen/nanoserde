@@ -270,6 +270,25 @@ fn collections() {
 }
 
 #[test]
+fn phantom_data() {
+    #[derive(DeBin, SerBin, PartialEq, Debug)]
+    pub struct Test<T> {
+        pub marker: core::marker::PhantomData<T>,
+    }
+
+    let test: Test<i32> = Test {
+        marker: core::marker::PhantomData,
+    };
+
+    let bytes = SerBin::serialize_bin(&test);
+
+    let test_deserialized = DeBin::deserialize_bin(&bytes).unwrap();
+
+    assert_eq!(bytes, []);
+    assert_eq!(test, test_deserialized);
+}
+
+#[test]
 fn array_leak_test() {
     static TOGGLED_ON_DROP: AtomicBool = AtomicBool::new(false);
 

@@ -653,3 +653,17 @@ where
         Ok(Box::new(DeBin::de_bin(o, d)?))
     }
 }
+
+impl<T> SerBin for core::marker::PhantomData<T> {
+    #[inline(always)]
+    fn ser_bin(&self, _s: &mut Vec<u8>) {
+        // do nothing
+    }
+}
+
+impl<T> DeBin for core::marker::PhantomData<T> {
+    #[inline(always)]
+    fn de_bin(_o: &mut usize, _d: &[u8]) -> Result<core::marker::PhantomData<T>, DeBinErr> {
+        Ok(Self)
+    }
+}
